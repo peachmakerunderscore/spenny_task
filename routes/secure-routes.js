@@ -8,7 +8,7 @@ const Relations = require("../models/relations");
 
 router.post(
   "/tweet",
-  body("tweet").notEmpty(),
+  body("tweet").notEmpty().isLength({ max: 140 }),
   isTokenValid,
   async (req, res) => {
     const errors = validationResult(req);
@@ -60,6 +60,28 @@ router.get("/peopleifollow", isTokenValid, async (req, res) => {
   if (following) {
     return res.status(200).json({
       status: 1,
+      message: following,
+    });
+  } else {
+    return res.status(200).json({
+      status: 0,
+      message: "Could not get people you follow",
+    });
+  }
+});
+
+router.get("/peoplewhofollowme", isTokenValid, async (req, res) => {
+  const following = await Relations.find({ follows: req.decodedJWT.user._id });
+  if (following.length == 0) {
+    return res.status(200).json({
+      status: 1,
+      message: `There are ${following.length} people who follow you.`,
+    });
+  }
+  if (following) {
+    return res.status(200).json({
+      status: 1,
+      followers: `There are ${following.length} people who follow you.`,
       message: following,
     });
   } else {
