@@ -6,6 +6,42 @@ const User = require("../models/user");
 const Tweets = require("../models/userTweets");
 const Relations = require("../models/relations");
 
+router.get("/home", isTokenValid, async (req, res) => {
+  console.log(req.decodedJWT.user._id);
+  Tweets.aggregate([
+    {
+      $lookup: {
+        from: "relations",
+        let: { userIDinTweet: "$user_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$user_id", req.decodedJWT.user._id] },
+                  { $eq: ["$follows", "$$userIDinTweet"] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "alltweets",
+      },
+    },
+    {
+      $sort: {
+        tweetedAt: -1,
+      },
+    },
+  ])
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 router.post(
   "/tweet",
   body("tweet").notEmpty().isLength({ max: 140 }),
@@ -60,28 +96,6 @@ router.get("/peopleifollow", isTokenValid, async (req, res) => {
   if (following) {
     return res.status(200).json({
       status: 1,
-      message: following,
-    });
-  } else {
-    return res.status(200).json({
-      status: 0,
-      message: "Could not get people you follow",
-    });
-  }
-});
-
-router.get("/peoplewhofollowme", isTokenValid, async (req, res) => {
-  const following = await Relations.find({ follows: req.decodedJWT.user._id });
-  if (following.length == 0) {
-    return res.status(200).json({
-      status: 1,
-      message: `There are ${following.length} people who follow you.`,
-    });
-  }
-  if (following) {
-    return res.status(200).json({
-      status: 1,
-      followers: `There are ${following.length} people who follow you.`,
       message: following,
     });
   } else {
