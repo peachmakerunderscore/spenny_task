@@ -11,10 +11,11 @@ const router = express.Router();
 // SignUp API
 router.post(
   "/signup",
+  body("first_name").isString().trim().notEmpty().isLength({ min: 3 }),
+  body("last_name").trim().notEmpty().isLength({ min: 3 }),
   body("email").trim().notEmpty().isEmail(),
   body("password").trim().isLength({ min: 6, max: 20 }),
-  body("first_name").trim().notEmpty().isLength({ min: 3 }),
-  body("last_name").trim().notEmpty().isLength({ min: 3 }),
+
   async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

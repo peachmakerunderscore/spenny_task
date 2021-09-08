@@ -9,7 +9,7 @@ var userSchema = mongoose.Schema({
     unique: false,
     minlength: 3,
     trim: true,
-    match: [/^[a-zA-Z]+$/, "is invalid"],
+    match: [/^[a-zA-Z0-9]+$/, "is invalid"],
     index: true,
   },
   last_name: {
@@ -18,7 +18,7 @@ var userSchema = mongoose.Schema({
     unique: false,
     minlength: 3,
     trim: true,
-    match: [/^[a-zA-Z]+$/, "is invalid"],
+    match: [/^[a-zA-Z0-9]+$/, "is invalid"],
     index: true,
   },
   email: {
