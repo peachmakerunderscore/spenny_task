@@ -41,10 +41,16 @@ router.get("/home", isTokenValid, (req, res) => {
         });
       })
       .catch((error) => {
-        console.log(error);
+        return res.status(200).json({
+          status: 0,
+          message: error,
+        });
       });
   } catch (e) {
-    console.log("An exception has occured" + e);
+    return res.status(200).json({
+      status: 0,
+      message: e,
+    });
   }
 });
 

@@ -37,10 +37,9 @@ router.post(
         next();
       }
     } catch (error) {
-      console.log(error);
       res.status(500).json({
         status: 0,
-        message: "Oh no!! internal server error :(",
+        message: error,
       });
     }
   },
