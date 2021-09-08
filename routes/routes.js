@@ -70,7 +70,7 @@ router.post(
 
         return res.json({
           status: 1,
-          message: "Login succesfull",
+          message: "Login succesful",
           token: token,
           user,
         });

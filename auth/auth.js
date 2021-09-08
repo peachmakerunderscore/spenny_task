@@ -15,6 +15,7 @@ passport.use(
         const ans = JSON.parse(JSON.stringify(req.body));
         ans.provider = "local";
         ans.email = ans.email.toLowerCase();
+        ans.createdAt = Date.now();
 
         const user = await User.create(ans);
 

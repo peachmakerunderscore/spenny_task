@@ -15,9 +15,8 @@ var tweetSchema = mongoose.Schema({
     unique: false,
     index: true,
   },
-  createdAt: {
+  tweetedAt: {
     type: Date,
-    default: Date.now(),
   },
 });
 

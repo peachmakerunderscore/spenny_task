@@ -18,6 +18,7 @@ router.post(
     const tweet = {
       tweet: req.body.tweet,
       user_id: req.decodedJWT.user._id,
+      tweetedAt: Date.now(),
     };
 
     const Tweeter = await Tweets.create(tweet);

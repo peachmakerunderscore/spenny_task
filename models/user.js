@@ -44,7 +44,6 @@ var userSchema = mongoose.Schema({
 
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
 
   passwordResetToken: String,
