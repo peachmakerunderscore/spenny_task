@@ -6,40 +6,46 @@ const User = require("../models/user");
 const Tweets = require("../models/userTweets");
 const Relations = require("../models/relations");
 
-router.get("/home", isTokenValid, async (req, res) => {
-  console.log(req.decodedJWT.user._id);
-  Tweets.aggregate([
-    {
-      $lookup: {
-        from: "relations",
-        let: { userIDinTweet: "$user_id" },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ["$user_id", req.decodedJWT.user._id] },
-                  { $eq: ["$follows", "$$userIDinTweet"] },
-                ],
+router.get("/home", isTokenValid, (req, res) => {
+  try {
+    Tweets.aggregate([
+      {
+        $lookup: {
+          from: "relations",
+          let: { userIDinTweet: "$user_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$user_id", req.decodedJWT.user._id] },
+                    { $eq: ["$follows", "$$userIDinTweet"] },
+                  ],
+                },
               },
             },
-          },
-        ],
-        as: "alltweets",
+          ],
+          as: "alltweets",
+        },
       },
-    },
-    {
-      $sort: {
-        tweetedAt: -1,
+      {
+        $sort: {
+          tweetedAt: -1,
+        },
       },
-    },
-  ])
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    ])
+      .then((tweetResponses) => {
+        return res.status(200).json({
+          status: 1,
+          message: tweetResponses.map(({ tweet, _id }) => ({ tweet, _id })),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (e) {
+    console.log("An exception has occured" + e);
+  }
 });
 
 router.post(
