@@ -5,7 +5,9 @@ const { DB } = require("./config/config");
 const app = require("./app");
 
 const DATABASE_CONN_STRING = process.MONGO_URI || DB;
-
+if (!DATABASE_CONN_STRING) {
+  return console.log("Please insert MONGODB URI in enviroment");
+}
 mongoose
   .connect(DATABASE_CONN_STRING, {
     useNewUrlParser: true,
