@@ -7,7 +7,7 @@ var userSchema = mongoose.Schema({
     type: String,
     required: [true, "Can't be blank"],
     unique: false,
-    minlength: 3,
+    minLength: 3,
     trim: true,
     match: [/^[a-zA-Z0-9]+$/, "is invalid"],
     index: true,
@@ -16,7 +16,7 @@ var userSchema = mongoose.Schema({
     type: String,
     required: [true, "Can't be blank"],
     unique: false,
-    minlength: 3,
+    minLength: 3,
     trim: true,
     match: [/^[a-zA-Z0-9]+$/, "is invalid"],
     index: true,
@@ -32,8 +32,8 @@ var userSchema = mongoose.Schema({
   password: {
     type: String,
     trim: true,
-    minlength: 6,
-    maxlength: 20,
+    minLength: 6,
+    maxLength: 20,
     required: [true, "Can't be blank"],
   },
 
@@ -45,9 +45,6 @@ var userSchema = mongoose.Schema({
   createdAt: {
     type: Date,
   },
-
-  passwordResetToken: String,
-  passwordResetExpires: Date,
 });
 
 userSchema.pre("save", async function (next) {
