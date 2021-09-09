@@ -7,7 +7,9 @@ const User = require("../models/user");
 const router = express.Router();
 
 // Public APIs
-
+router.get("/", (req, res) => {
+  res.send("Welcome to Twttr");
+});
 // SignUp API
 router.post(
   "/signup",
