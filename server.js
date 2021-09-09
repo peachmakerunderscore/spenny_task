@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
-
+const { DB } = require("./config/config");
 const app = require("./app");
 
-const DATABASE_CONN_STRING =
-  process.env.DATABASE_CONN_STRING ||
-  "mongodb+srv://jaibhatt:J0yqRxeKmttcNeK0a@cluster0.syckn.mongodb.net/spennyDatabase?retryWrites=true&w=majority";
+const DATABASE_CONN_STRING = process.MONGO_URI || DB;
 
 mongoose
   .connect(DATABASE_CONN_STRING, {
